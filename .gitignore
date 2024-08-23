@@ -1,0 +1,12 @@
+__pycache__/
+*.py[cod]
+
+data/
+*.csv
+*.xlsx
+*.env
+.env
+
+*.log
+*.tmp
+
