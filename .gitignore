@@ -13,5 +13,6 @@ data/
 api/
 
 models/*.joblib
+app/models/*.joblib
 
 
