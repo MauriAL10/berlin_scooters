@@ -12,3 +12,6 @@ data/
 
 api/
 
+models/*.joblib
+
+
