@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Predicción de Alquileres de Monopatines</title>
+</head>
+<body>
+    <h1>Predicción de Alquileres de Monopatines</h1>
+    <form method="POST">
+        <label for="hora">Hora:</label>
+        <input type="number" id="hora" name="hora" required><br>
+
+        <label for="temperatura">Temperatura:</label>
+        <input type="number" step="0.01" id="temperatura" name="temperatura" required><br>
+
+        <label for="sensacion_termica">Sensación Térmica:</label>
+        <input type="number" step="0.01" id="sensacion_termica" name="sensacion_termica" required><br>
+
+        <label for="humedad">Humedad:</label>
+        <input type="number" step="0.01" id="humedad" name="humedad" required><br>
+
+        <label for="velocidad_viento">Velocidad del Viento:</label>
+        <input type="number" step="0.01" id="velocidad_viento" name="velocidad_viento" required><br>
+
+        <label for="temporada">Temporada (0-3):</label>
+        <input type="number" id="temporada" name="temporada" required><br>
+
+        <label for="anio">Año:</label>
+        <input type="number" id="anio" name="anio" required><br>
+
+        <label for="mes">Mes (1-12):</label>
+        <input type="number" id="mes" name="mes" required><br>
+
+        <label for="feriado">Feriado (0 o 1):</label>
+        <input type="number" id="feriado" name="feriado" required><br>
+
+        <label for="dia_semana">Día de la Semana (0-6):</label>
+        <input type="number" id="dia_semana" name="dia_semana" required><br>
+
+        <label for="dia_trabajo">Día de Trabajo (0 o 1):</label>
+        <input type="number" id="dia_trabajo" name="dia_trabajo" required><br>
+
+        <label for="clima">Clima (1-3):</label>
+        <input type="number" id="clima" name="clima" required><br>
+
+        <label for="modelo">Modelo:</label>
+        <select id="modelo" name="modelo">
+            <option value="xgboost">XGBoost</option>
+            <option value="random_forest">Random Forest</option>
+        </select><br>
+
+        <button type="submit">Predecir</button>
+    </form>
+
+    {% if prediction %}
+        <h2>Predicción: {{ prediction }}</h2>
+    {% endif %}
+</body>
+</html>
