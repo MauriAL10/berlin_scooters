@@ -18,6 +18,13 @@ import matplotlib.pyplot as plt
 from scipy.stats import randint, uniform
 
 class OutlierHandler(BaseEstimator, TransformerMixin):
+    """
+    OutlierHandler:
+    Esta clase maneja los outliers en las columnas del DataFrame.
+    Utiliza el rango intercuartílico (IQR) para determinar los límites inferiores y superiores
+    para luego reemplazar cualquier valor fuera de estos límites por el valor limite mas cercano.
+
+    """
     def __init__(self, columns):
         self.columns = columns
 
@@ -36,8 +43,11 @@ class OutlierHandler(BaseEstimator, TransformerMixin):
         X = X.copy()
         for col in self.columns:
             lower_bound, upper_bound = self.limits[col]
+            #Aplica los limites a los valores fuera de rango
             X[col] = X[col].apply(lambda x: lower_bound if x < lower_bound else upper_bound if x > upper_bound else x)
         return X
+    
+#Funcion para features ciclicos (horas) utilizando el seno y coseno
 
 def add_cyclic_features(df, column, max_val):
     df = df.copy()
@@ -45,16 +55,17 @@ def add_cyclic_features(df, column, max_val):
     df[column + '_cos'] = np.cos(2 * np.pi * df[column] / max_val)
     return df
 
+#Funcion para obtener relaciones entre algunos features
 def add_interaction_features(df):
     df = df.copy()
-    # Asegúrate de que las columnas cíclicas están presentes
     if 'hora_sin' in df.columns and 'hora_cos' in df.columns:
-        # Interacción entre temperatura y hora
+        #Relacion entre temperatura y hora
         df['temp_hora_interaction'] = df['temperatura'] * df['hora_sin'] * df['hora_cos']
-        # Interacción entre temperatura y sensación térmica
+        #Relacion entre temperatura y sensación termica
         df['temp_sensacion_interaction'] = df['temperatura'] * df['sensacion_termica']
     return df
 
+#Funcion para extraer las columnas importantes de la fecha
 def extract_date_features(df, date_column):
     df[date_column] = pd.to_datetime(df[date_column])
     df['dia_mes'] = df[date_column].dt.day
@@ -64,7 +75,7 @@ def extract_date_features(df, date_column):
     df['año'] = df[date_column].dt.year
     return df.drop(columns=[date_column])
 
-# Función para la búsqueda de hiperparámetros usando RandomizedSearchCV
+#Funcion para la busqueda de hiperparámetros usando Randomized Search
 def hyperparameter_search(pipeline, param_distributions, X_train, y_train):
     search = RandomizedSearchCV(pipeline, param_distributions, n_iter=50, cv=5, scoring='neg_mean_squared_error', n_jobs=-1, random_state=42)
     search.fit(X_train, y_train)
@@ -74,6 +85,7 @@ def hyperparameter_search(pipeline, param_distributions, X_train, y_train):
     
     return best_model, best_params
 
+#Funcion para evaluar el modelo mediante distintas metricas
 def evaluate_model(pipeline, X_train, y_train, X_test, y_test):
     scores = cross_val_score(pipeline, X_train, y_train, cv=5, scoring='neg_mean_squared_error')
     rmse = (-scores.mean()) ** 0.5
@@ -101,31 +113,30 @@ def build_pipeline(model):
         ('model', model)
     ])
 
-# Función principal para ejecutar el pipeline
+
 def run_pipeline(data_path='./data/dataset_alquiler.csv'):
-    data = pd.read_csv(data_path)
+    scooters_df = pd.read_csv(data_path)
 
-    # Eliminar duplicados
-    data = data.drop_duplicates()
+    #Eliminar duplicados
+    scooters_df = scooters_df.drop_duplicates()
 
-    # Extraer características de la fecha
-    data = extract_date_features(data, 'fecha')
+    scooters_df = extract_date_features(scooters_df, 'fecha')
 
-    X = data.drop(columns=['indice', 'u_casuales', 'u_registrados', 'total_alquileres'])
-    y = data['total_alquileres'].fillna(data['total_alquileres'].median())
+    X = scooters_df.drop(columns=['indice', 'u_casuales', 'u_registrados', 'total_alquileres'])
+    y = scooters_df['total_alquileres'].fillna(scooters_df['total_alquileres'].median())
 
-    # Eliminar filas con valores nulos en X o y
+    #Eliminar registros con valores nulos
     X = X.dropna()
     y = y.loc[X.index]
 
-    # División del dataset en entrenamiento y prueba
+    #Split del dataset en train y test
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
-    # Crear un directorio para guardar los modelos si no existe
+    #Crear un directorio para guardar los modelos en caso de que no exista
     model_dir = "./models"
     os.makedirs(model_dir, exist_ok=True)
 
-    # Evaluar modelos y realizar la búsqueda de hiperparámetros
+    #Busqueda de mejores hiperparametros
     models = {
         'LinearRegression': (LinearRegression(), {'model__fit_intercept': [True, False]}),
         'KNN': (KNeighborsRegressor(), {'model__n_neighbors': randint(3, 11), 'model__weights': ['uniform', 'distance']}),
@@ -140,15 +151,15 @@ def run_pipeline(data_path='./data/dataset_alquiler.csv'):
     best_predictions = None
 
     for name, (model, param_distributions) in models.items():
-        print(f"Evaluando modelo: {name}")
+        print(f"Evaluacion del modelo: {name}")
         pipeline = build_pipeline(model)
         best_model_current, best_params = hyperparameter_search(pipeline, param_distributions, X_train, y_train)
-        print(f"Mejores hiperparámetros para {name}: {best_params}")
+        print(f"Mejores hiperparametros para {name}: {best_params}")
         rmse, r2, y_pred = evaluate_model(best_model_current, X_train, y_train, X_test, y_test)
-        print(f"RMSE para {name} (mejorado): {rmse}")
-        print(f"R^2 para {name} (mejorado): {r2}")
+        print(f"RMSE para {name}: {rmse}")
+        print(f"R^2 para {name}: {r2}")
 
-        # Exportar cada modelo al directorio models
+        #Guardar cada modelo en el directorio creado
         model_filename = os.path.join(model_dir, f"{name}_model.joblib")
         joblib.dump(best_model_current, model_filename)
         print(f"Modelo {name} exportado como {model_filename}")
@@ -159,11 +170,11 @@ def run_pipeline(data_path='./data/dataset_alquiler.csv'):
             best_model_name = name
             best_predictions = y_pred
 
-    # Mostrar el mejor modelo
+    #Mostrar el mejor modelo
     if best_model is not None:
         print(f"El mejor modelo es {best_model_name} con RMSE: {best_rmse}")
 
-        # Verificación de las predicciones del mejor modelo
+        #Grafico de las predicciones del mejor modelo
         print("\nVerificando las predicciones del mejor modelo...")
         plt.figure(figsize=(10, 6))
         plt.scatter(y_test, best_predictions, alpha=0.5)
@@ -172,7 +183,7 @@ def run_pipeline(data_path='./data/dataset_alquiler.csv'):
         plt.title(f"Verificación de las Predicciones - Modelo: {best_model_name}")
         plt.show()
 
-        # Calcular y mostrar métricas adicionales
+        #Metricas del mejor modelo
         mae = mean_absolute_error(y_test, best_predictions)
         print(f"Mean Absolute Error (MAE): {mae}")
         print(f"Root Mean Squared Error (RMSE): {best_rmse}")

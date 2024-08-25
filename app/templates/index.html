@@ -1,60 +1,153 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Predicción de Alquileres de Monopatines</title>
+    <title>Predicción de Alquileres de Monopatines en Berlín</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
-    <h1>Predicción de Alquileres de Monopatines</h1>
-    <form method="POST">
-        <label for="hora">Hora:</label>
-        <input type="number" id="hora" name="hora" required><br>
+    <div class="container mt-5 p-4 bg-light rounded shadow">
+        <h1 class="text-center text-white bg-dark p-2 rounded">Predicción de Alquileres de Monopatines</h1>
+        {% if error %}
+            <div class="alert alert-danger" role="alert">
+                {{ error }}
+            </div>
+        {% endif %}
+        <form method="post" class="mt-4">
+            <div class="input-container">
+                <label for="hora" class="form-label">Hora (0-23):</label>
+                <input type="number" class="form-control" id="hora" name="hora" min="0" max="23" step="1" placeholder="Ejemplo: 14" required>
+            </div>
 
-        <label for="temperatura">Temperatura:</label>
-        <input type="number" step="0.01" id="temperatura" name="temperatura" required><br>
+            <div class="input-container">
+                <label for="temperatura" class="form-label">Temperatura (0 = Frío extremo, 1 = Calor extremo):</label>
+                <input type="range" class="form-range" id="temperatura" name="temperatura" min="0" max="1" step="0.01" value="0.7">
+                <span id="temperatura_value">0.7</span>
+            </div>
 
-        <label for="sensacion_termica">Sensación Térmica:</label>
-        <input type="number" step="0.01" id="sensacion_termica" name="sensacion_termica" required><br>
+            <div class="input-container">
+                <label for="sensacion_termica" class="form-label">Sensación Térmica (0 = Muy frío, 1 = Muy cálido):</label>
+                <input type="range" class="form-range" id="sensacion_termica" name="sensacion_termica" min="0" max="1" step="0.01" value="0.65">
+                <span id="sensacion_termica_value">0.65</span>
+            </div>
 
-        <label for="humedad">Humedad:</label>
-        <input type="number" step="0.01" id="humedad" name="humedad" required><br>
+            <div class="input-container">
+                <label for="humedad" class="form-label">Humedad (0 = Muy seco, 1 = Muy húmedo):</label>
+                <input type="range" class="form-range" id="humedad" name="humedad" min="0" max="1" step="0.01" value="0.8">
+                <span id="humedad_value">0.8</span>
+            </div>
 
-        <label for="velocidad_viento">Velocidad del Viento:</label>
-        <input type="number" step="0.01" id="velocidad_viento" name="velocidad_viento" required><br>
+            <div class="input-container">
+                <label for="velocidad_viento" class="form-label">Velocidad del Viento (0 = Calma, 1 = Viento fuerte):</label>
+                <input type="range" class="form-range" id="velocidad_viento" name="velocidad_viento" min="0" max="1" step="0.01" value="0.2">
+                <span id="velocidad_viento_value">0.2</span>
+            </div>
 
-        <label for="temporada">Temporada (0-3):</label>
-        <input type="number" id="temporada" name="temporada" required><br>
+            <div class="input-container">
+                <label for="temporada" class="form-label">Temporada:</label>
+                <select class="form-select" id="temporada" name="temporada" required>
+                    <option value="1">Invierno</option>
+                    <option value="2">Primavera</option>
+                    <option value="3">Verano</option>
+                    <option value="4">Otoño</option>
+                </select>
+            </div>
 
-        <label for="anio">Año:</label>
-        <input type="number" id="anio" name="anio" required><br>
+            <div class="input-container">
+                <label for="anio" class="form-label">Año:</label>
+                <input type="number" class="form-control" id="anio" name="anio" min="2000" max="2100" step="1" placeholder="Ejemplo: 2022" required>
+            </div>
 
-        <label for="mes">Mes (1-12):</label>
-        <input type="number" id="mes" name="mes" required><br>
+            <div class="input-container">
+                <label for="mes" class="form-label">Mes:</label>
+                <select class="form-select" id="mes" name="mes" required>
+                    <option value="1">Enero</option>
+                    <option value="2">Febrero</option>
+                    <option value="3">Marzo</option>
+                    <option value="4">Abril</option>
+                    <option value="5">Mayo</option>
+                    <option value="6">Junio</option>
+                    <option value="7">Julio</option>
+                    <option value="8">Agosto</option>
+                    <option value="9">Septiembre</option>
+                    <option value="10">Octubre</option>
+                    <option value="11">Noviembre</option>
+                    <option value="12">Diciembre</option>
+                </select>
+            </div>
 
-        <label for="feriado">Feriado (0 o 1):</label>
-        <input type="number" id="feriado" name="feriado" required><br>
+            <div class="input-container">
+                <label for="feriado" class="form-label">Feriado:</label>
+                <select class="form-select" id="feriado" name="feriado" required>
+                    <option value="0">No</option>
+                    <option value="1">Sí</option>
+                </select>
+            </div>
 
-        <label for="dia_semana">Día de la Semana (0-6):</label>
-        <input type="number" id="dia_semana" name="dia_semana" required><br>
+            <div class="input-container">
+                <label for="dia_semana" class="form-label">Día de la Semana:</label>
+                <select class="form-select" id="dia_semana" name="dia_semana" required>
+                    <option value="0">Domingo</option>
+                    <option value="1">Lunes</option>
+                    <option value="2">Martes</option>
+                    <option value="3">Miércoles</option>
+                    <option value="4">Jueves</option>
+                    <option value="5">Viernes</option>
+                    <option value="6">Sábado</option>
+                </select>
+            </div>
 
-        <label for="dia_trabajo">Día de Trabajo (0 o 1):</label>
-        <input type="number" id="dia_trabajo" name="dia_trabajo" required><br>
+            <div class="input-container">
+                <label for="dia_trabajo" class="form-label">Día de Trabajo:</label>
+                <select class="form-select" id="dia_trabajo" name="dia_trabajo" required>
+                    <option value="0">No</option>
+                    <option value="1">Sí</option>
+                </select>
+            </div>
 
-        <label for="clima">Clima (1-3):</label>
-        <input type="number" id="clima" name="clima" required><br>
+            <div class="input-container">
+                <label for="clima" class="form-label">Clima:</label>
+                <select class="form-select" id="clima" name="clima" required>
+                    <option value="1">Soleado</option>
+                    <option value="2">Nublado</option>
+                    <option value="3">Lluvioso</option>
+                </select>
+            </div>
 
-        <label for="modelo">Modelo:</label>
-        <select id="modelo" name="modelo">
-            <option value="xgboost">XGBoost</option>
-            <option value="random_forest">Random Forest</option>
-        </select><br>
+            <div class="input-container">
+                <label for="modelo" class="form-label">Modelo:</label>
+                <select class="form-select" id="modelo" name="modelo" required>
+                    <option value="XGBoost">XGBoost</option>
+                    <option value="LinearRegression">Linear Regression</option>
+                    <option value="KNN">K-Nearest Neighbors</option>
+                    <option value="DecisionTree">Decision Tree</option>
+                </select>
+            </div>
 
-        <button type="submit">Predecir</button>
-    </form>
+            <button type="submit" class="btn btn-danger">Predecir</button>
+        </form>
 
-    {% if prediction %}
-        <h2>Predicción: {{ prediction }}</h2>
-    {% endif %}
+        {% if prediction %}
+            <div class="alert alert-success mt-4" role="alert" style="border: 2px solid #FFD700;">
+                <strong>Predicción:</strong> {{ prediction }}
+            </div>
+        {% endif %}
+    </div>
+
+    <script>
+        // Actualizar el valor mostrado del control deslizante (slider) para cada campo
+        const sliders = ['temperatura', 'sensacion_termica', 'humedad', 'velocidad_viento'];
+
+        sliders.forEach(slider => {
+            const sliderElement = document.getElementById(slider);
+            const valueElement = document.getElementById(slider + '_value');
+            sliderElement.oninput = function() {
+                valueElement.innerText = this.value;
+            }
+        });
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
