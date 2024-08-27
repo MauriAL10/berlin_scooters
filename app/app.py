@@ -9,10 +9,10 @@ import numpy as np
 app = Flask(__name__)
 
 models = {
-    "LinearRegression": joblib.load("./models/LinearRegression_model.joblib"),
-    "KNN": joblib.load("./models/KNN_model.joblib"),
-    "DecisionTree": joblib.load("./models/DecisionTree_model.joblib"),
-    'XGBoost': joblib.load('./models/XGBoost_model.joblib'),
+    "LinearRegression": joblib.load("models/LinearRegression_model.joblib"),
+    "KNN": joblib.load("models/KNN_model.joblib"),
+    "DecisionTree": joblib.load("models/DecisionTree_model.joblib"),
+    'XGBoost': joblib.load('models/XGBoost_model.joblib'),
     #'RandomForest': joblib.load('./models/RandomForest_model.joblib'),
 }
 
