@@ -9,7 +9,7 @@
 </head>
 <body>
     <div class="container mt-5 p-4 bg-light rounded shadow">
-        <h1 class="text-center text-white bg-dark p-2 rounded">Predicción de Alquileres de Monopatines</h1>
+        <h1 class="text-center text-white bg-dark p-2 rounded">Predicción de Alquileres de Monopatines en Berlín</h1>
         {% if error %}
             <div class="alert alert-danger" role="alert">
                 {{ error }}
@@ -22,27 +22,23 @@
             </div>
 
             <div class="input-container">
-                <label for="temperatura" class="form-label">Temperatura (0 = Frío extremo, 1 = Calor extremo):</label>
-                <input type="range" class="form-range" id="temperatura" name="temperatura" min="0" max="1" step="0.01" value="0.7">
-                <span id="temperatura_value">0.7</span>
+                <label for="temperatura" class="form-label">Temperatura (°C):</label>
+                <input type="number" class="form-control" id="temperatura" name="temperatura" min="-5" max="40" step="0.1" placeholder="Ejemplo: 20.5" required>
             </div>
 
             <div class="input-container">
-                <label for="sensacion_termica" class="form-label">Sensación Térmica (0 = Muy frío, 1 = Muy cálido):</label>
-                <input type="range" class="form-range" id="sensacion_termica" name="sensacion_termica" min="0" max="1" step="0.01" value="0.65">
-                <span id="sensacion_termica_value">0.65</span>
+                <label for="sensacion_termica" class="form-label">Sensación Térmica (°C):</label>
+                <input type="number" class="form-control" id="sensacion_termica" name="sensacion_termica" min="-10" max="50" step="0.1" placeholder="Ejemplo: 21.0" required>
             </div>
 
             <div class="input-container">
-                <label for="humedad" class="form-label">Humedad (0 = Muy seco, 1 = Muy húmedo):</label>
-                <input type="range" class="form-range" id="humedad" name="humedad" min="0" max="1" step="0.01" value="0.8">
-                <span id="humedad_value">0.8</span>
+                <label for="humedad" class="form-label">Humedad (%):</label>
+                <input type="number" class="form-control" id="humedad" name="humedad" min="0" max="100" step="1" placeholder="Ejemplo: 65" required>
             </div>
 
             <div class="input-container">
-                <label for="velocidad_viento" class="form-label">Velocidad del Viento (0 = Calma, 1 = Viento fuerte):</label>
-                <input type="range" class="form-range" id="velocidad_viento" name="velocidad_viento" min="0" max="1" step="0.01" value="0.2">
-                <span id="velocidad_viento_value">0.2</span>
+                <label for="velocidad_viento" class="form-label">Velocidad del Viento (km/h):</label>
+                <input type="number" class="form-control" id="velocidad_viento" name="velocidad_viento" min="0" max="100" step="1" placeholder="Ejemplo: 15" required>
             </div>
 
             <div class="input-container">
@@ -57,8 +53,8 @@
 
             <div class="input-container">
                 <label for="anio" class="form-label">Año:</label>
-                <input type="number" class="form-control" id="anio" name="anio" min="2000" max="2100" step="1" placeholder="Ejemplo: 2022" required>
-            </div>
+                <input type="number" class="form-control" id="anio" name="anio" min="2000" max="2013" step="1" placeholder="Ejemplo: 2012" required>
+            </div>            
 
             <div class="input-container">
                 <label for="mes" class="form-label">Mes:</label>
@@ -77,6 +73,11 @@
                     <option value="12">Diciembre</option>
                 </select>
             </div>
+
+            <div class="input-container">
+                <label for="dia_mes" class="form-label">Día:</label>
+                <input type="number" class="form-control" id="dia_mes" name="dia_mes" min="1" max="31" step="1" placeholder="Ejemplo: 15" required>
+            </div>            
 
             <div class="input-container">
                 <label for="feriado" class="form-label">Feriado:</label>
@@ -123,6 +124,7 @@
                     <option value="LinearRegression">Linear Regression</option>
                     <option value="KNN">K-Nearest Neighbors</option>
                     <option value="DecisionTree">Decision Tree</option>
+                    <option value="RandomForest">Random Forest</option>
                 </select>
             </div>
 
@@ -136,18 +138,6 @@
         {% endif %}
     </div>
 
-    <script>
-        // Actualizar el valor mostrado del control deslizante (slider) para cada campo
-        const sliders = ['temperatura', 'sensacion_termica', 'humedad', 'velocidad_viento'];
-
-        sliders.forEach(slider => {
-            const sliderElement = document.getElementById(slider);
-            const valueElement = document.getElementById(slider + '_value');
-            sliderElement.oninput = function() {
-                valueElement.innerText = this.value;
-            }
-        });
-    </script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

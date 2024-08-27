@@ -8,14 +8,23 @@ import numpy as np
 
 app = Flask(__name__)
 
-#Cargar los modelos
+# Cargar los modelos
 models = {
     "LinearRegression": joblib.load("./models/LinearRegression_model.joblib"),
     "KNN": joblib.load("./models/KNN_model.joblib"),
     "DecisionTree": joblib.load("./models/DecisionTree_model.joblib"),
     'XGBoost': joblib.load('./models/XGBoost_model.joblib'),
-    # 'RandomForest': joblib.load('./models/RandomForest_model.joblib'),
+    'RandomForest': joblib.load('./models/RandomForest_model.joblib'),
 }
+
+#Rangos para normalizar
+TEMP_MIN, TEMP_MAX = -5, 40  #Rango para la temperatura en grados Celsius
+SENS_TERM_MIN, SENS_TERM_MAX = -10, 50  #Rango para la sensacion termica en grados Celsius
+HUMEDAD_MIN, HUMEDAD_MAX = 0, 100  #Rango para la humedad en %
+VIENTO_MIN, VIENTO_MAX = 0, 100  #Rango para la velocidad del viento en km/h
+
+def normalize(value, min_val, max_val):
+    return (value - min_val) / (max_val - min_val)
 
 def add_cyclic_features(df, column, max_val):
     df[column + '_sin'] = np.sin(2 * np.pi * df[column] / max_val)
@@ -35,15 +44,24 @@ def index():
             if not 0 <= hora <= 23:
                 raise ValueError("La hora debe estar entre 0 y 23.")
 
-            temperatura = float(request.form['temperatura'])
-            sensacion_termica = float(request.form['sensacion_termica'])
-            humedad = float(request.form['humedad'])
-            velocidad_viento = float(request.form['velocidad_viento'])
+            #Normalizar los valores ingresados por el usuario
+            temperatura = normalize(float(request.form['temperatura']), TEMP_MIN, TEMP_MAX)
+            sensacion_termica = normalize(float(request.form['sensacion_termica']), SENS_TERM_MIN, SENS_TERM_MAX)
+            humedad = normalize(float(request.form['humedad']), HUMEDAD_MIN, HUMEDAD_MAX)
+            velocidad_viento = normalize(float(request.form['velocidad_viento']), VIENTO_MIN, VIENTO_MAX)
+            
             temporada = int(request.form['temporada'])
             anio = int(request.form['anio'])
+            if not 2000 <= anio <= 2013:
+                raise ValueError("El año debe estar entre 2000 y 2012.")
+            
             mes = int(request.form['mes'])
             if not 1 <= mes <= 12:
                 raise ValueError("El mes debe estar entre 1 y 12.")
+
+            dia_mes = int(request.form['dia_mes'])
+            if not 1 <= dia_mes <= 31:
+                raise ValueError("El día del mes debe estar entre 1 y 31.")
 
             feriado = int(request.form['feriado'])
             if feriado not in [0, 1]:
@@ -63,7 +81,7 @@ def index():
 
             modelo = request.form['modelo']
 
-            #DataFrame con los datos
+            #Creación del DataFrame
             input_data = pd.DataFrame([{
                 'hora': hora,
                 'temperatura': temperatura,
@@ -73,6 +91,7 @@ def index():
                 'temporada': temporada,
                 'anio': anio,
                 'mes': mes,
+                'dia_mes': dia_mes,
                 'feriado': feriado,
                 'dia_semana': dia_semana,
                 'dia_trabajo': dia_trabajo,
@@ -83,7 +102,7 @@ def index():
             input_data = add_cyclic_features(input_data, 'hora', 24)
             input_data = add_interaction_features(input_data)
 
-            #Prediccion con los modelos (por defecto XGBoost)
+            #Prediccion de los modelos
             model = models.get(modelo, models['XGBoost'])
             prediction = model.predict(input_data)
             prediction_value = float(prediction[0])
