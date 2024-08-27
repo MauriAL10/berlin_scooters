@@ -48,7 +48,7 @@ python main.py
 Nota: Una vez se exporten todos los modelos aparecerá una imagen que muestra la calidad de predicciones del mejor modelo, se debe cerrar la imagen para terminar la ejecución.
 3. Ejecutar la aplicación: para poder observar la GUI, ejecutar el siguiente comando:
 ```
-pip app/app.py
+python app/app.py
 ```
 Abrir el navegador y dirigirse a http://127.0.0.1:5000/ para acceder a la aplicación.
 4. Ingresar los datos relevantes en la interfaz del usuario y seleccionar el modelo de predicción deseado. Finalmente se debe hacer clic en "Predecir".
