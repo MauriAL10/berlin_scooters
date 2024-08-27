@@ -1,6 +1,7 @@
 import sys
 sys.path.append("..")
 
+import os
 from flask import Flask, render_template, request
 import joblib
 import pandas as pd
@@ -8,12 +9,14 @@ import numpy as np
 
 app = Flask(__name__)
 
+base_dir = os.path.dirname(os.path.abspath(__file__))
+
 models = {
-    "LinearRegression": joblib.load("models/LinearRegression_model.joblib"),
-    "KNN": joblib.load("models/KNN_model.joblib"),
-    "DecisionTree": joblib.load("models/DecisionTree_model.joblib"),
-    'XGBoost': joblib.load('models/XGBoost_model.joblib'),
-    #'RandomForest': joblib.load('./models/RandomForest_model.joblib'),
+    "LinearRegression": joblib.load(os.path.join(base_dir, "models", "LinearRegression_model.joblib")),
+    "KNN": joblib.load(os.path.join(base_dir, "models", "KNN_model.joblib")),
+    "DecisionTree": joblib.load(os.path.join(base_dir, "models", "DecisionTree_model.joblib")),
+    'XGBoost': joblib.load(os.path.join(base_dir, "models", "XGBoost_model.joblib")),
+    #'RandomForest': joblib.load(os.path.join(base_dir, "models", "RandomForest_model.joblib")),
 }
 
 #Rangos para normalizar
