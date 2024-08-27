@@ -9,7 +9,7 @@ __pycache__/
 
 api/
 
-models/*.joblib
-app/models/*.joblib
+models/RandomForest_model.joblib
+app/models/RandomForest_model.joblib
 
 
