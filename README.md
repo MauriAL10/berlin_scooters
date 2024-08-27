@@ -63,8 +63,8 @@ Ejemplos de algunas predicciones:
 El despliegue se realizó en Railway, a continuación se detallan los pasos seguidos:
 
 1. Configuración del entorno: se definieron las dependencias en el archivo 'requirements.txt' y se configuró el archivo 'Procfile' para iniciar la aplicación utilizando Gunicorn.
-2. Una vez que se completó el deploy de manera exitosa, Railway generó la siguiente URL pública para acceder a la app: 
-https://berlinscooters-production.up.railway.app/
+2. Una vez que se completó el deploy de manera exitosa, Railway generó la siguiente URL pública para acceder a la app:
+https://web-production-797a.up.railway.app/
 
 ### Exclusión del Modelo Random Forest
 El modelo Random Forest fue entrenado y utilizado durante la fase de desarrollo. Sin embargo, debido a que el archivo del modelo supera el límite de 100 MB, no fue posible incluirlo en el repositorio de GitHub ni desplegarlo directamente en Railway.
