@@ -41,14 +41,14 @@ pip install -r requirements.txt
 ```
 git clone https://github.com/MauriAL10/berlin_scooters
 ```
-2. Ejecutar el pipeline: en la raíz del proyecto ejecutar el siguiente comando para construir el pipeline y exportar los modelos
+2. Ejecutar el pipeline: en la raíz del proyecto ejecutar el siguiente comando para construir el pipeline y exportar los modelos al directorio de la interfaz.
 ```
 python main.py
 ```
 Nota: Una vez se exporten todos los modelos aparecerá una imagen que muestra la calidad de predicciones del mejor modelo, se debe cerrar la imagen para terminar la ejecución.
-3. Ejecutar la aplicación: para poder observar la GUI, ejecutar el siguiente comando:
+3. Ejecutar la aplicación: para poder observar la GUI, ejecutar el siguiente comando dentro del directorio app:
 ```
-python app/app.py
+python app.py
 ```
 Abrir el navegador y dirigirse a http://127.0.0.1:5000/ para acceder a la aplicación.
 4. Ingresar los datos relevantes en la interfaz del usuario y seleccionar el modelo de predicción deseado. Finalmente se debe hacer clic en "Predecir".
@@ -57,3 +57,19 @@ Ejemplos de algunas predicciones:
 - Primavera: 20 de abril de 2012, 6:00 PM, 16°C, 16°C, 60% de humedad, 10 km/h de viento, día soleado.
 - Verano: 10 de agosto de 2012, 2:00 PM, 28°C, 30°C, 70% de humedad, 5 km/h de viento, día soleado.
 - Otoño: 25 de octubre de 2012, 8:00 AM, 10°C, 8°C, 75% de humedad, 12 km/h de viento, día nublado.
+
+## Despliegue en la nube
+
+El despliegue se realizó en Railway, a continuación se detallan los pasos seguidos:
+
+1. Configuración del entorno: se definieron las dependencias en el archivo 'requirements.txt' y se configuró el archivo 'Procfile' para iniciar la aplicación utilizando Gunicorn.
+2. Una vez que se completó el deploy de manera exitosa, Railway generó la siguiente URL pública para acceder a la app: 
+https://berlinscooters-production.up.railway.app/
+
+### Exclusión del Modelo Random Forest
+El modelo Random Forest fue entrenado y utilizado durante la fase de desarrollo. Sin embargo, debido a que el archivo del modelo supera el límite de 100 MB, no fue posible incluirlo en el repositorio de GitHub ni desplegarlo directamente en Railway.
+
+Para poder utilizarlo DE MANERA LOCAL, se deben eliminar los comentarios de la línea 19 en el archivo 'app.py' y de la línea 130 en 'index.html'.
+Cabe destacar que los demás modelos si están presentes en el despliegue tanto local como en la URL de railway.
+
+
