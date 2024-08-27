@@ -13,7 +13,7 @@ models = {
     "KNN": joblib.load("./models/KNN_model.joblib"),
     "DecisionTree": joblib.load("./models/DecisionTree_model.joblib"),
     'XGBoost': joblib.load('./models/XGBoost_model.joblib'),
-    'RandomForest': joblib.load('./models/RandomForest_model.joblib'),
+    #'RandomForest': joblib.load('./models/RandomForest_model.joblib'),
 }
 
 #Rangos para normalizar
