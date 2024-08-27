@@ -8,7 +8,6 @@ import numpy as np
 
 app = Flask(__name__)
 
-# Cargar los modelos
 models = {
     "LinearRegression": joblib.load("./models/LinearRegression_model.joblib"),
     "KNN": joblib.load("./models/KNN_model.joblib"),

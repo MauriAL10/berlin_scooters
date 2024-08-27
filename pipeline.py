@@ -132,8 +132,8 @@ def run_pipeline(data_path='./data/dataset_alquiler.csv'):
     #Split del dataset en train y test
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
-    #Crear un directorio para guardar los modelos en caso de que no exista
-    model_dir = "./models"
+    #Crear un directorio para guardar los modelos en la carpeta de la GUI
+    model_dir = "./app/models"
     os.makedirs(model_dir, exist_ok=True)
 
     #Busqueda de mejores hiperparametros
