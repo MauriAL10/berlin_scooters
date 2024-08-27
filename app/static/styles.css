@@ -6,56 +6,90 @@ body {
 }
 
 .container {
-    max-width: 600px;
+    max-width: 800px;
     margin: 50px auto;
     padding: 20px;
-    background-color: #FFD700; /* Fondo dorado/amarillo */
+    background-color: #FFD700;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     border-radius: 5px;
-    border: 2px solid #FF0000; /* Borde rojo */
+    border: 2px solid #FF0000;
 }
 
 h1 {
     text-align: center;
-    color: #FFFFFF; /* Texto en blanco para contrastar con el fondo negro */
-    background-color: #000000; /* Fondo negro para el encabezado */
+    color: #FFFFFF;
+    background-color: #000000;
     padding: 10px;
     border-radius: 5px 5px 0 0;
 }
 
 .form-label {
-    color: #000000; /* Texto en negro */
+    color: #000000;
 }
 
 .input-container {
-    border: 2px solid #FFD700; /* Borde amarillo */
-    border-radius: 5px;
     margin-bottom: 15px;
-    padding: 10px;
 }
 
 input, select, .form-range {
     font-size: 16px;
-    border: 1px solid #FF0000; /* Bordes rojos */
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #FF0000;
     border-radius: 5px;
+    box-sizing: border-box;
 }
 
 button {
+    width: 100%;
     padding: 10px;
     font-size: 16px;
-    color: #FFFFFF; /* Texto blanco */
-    background-color: #FF0000; /* Fondo rojo */
+    color: #FFFFFF;
+    background-color: #FF0000;
     border: none;
     border-radius: 5px;
     cursor: pointer;
+    margin-top: 10px;
 }
 
 button:hover {
-    background-color: #C70000; /* Rojo más oscuro al pasar el cursor */
+    background-color: #C70000;
+}
+
+.result-box {
+    border: 2px solid #FFD700;
+    background-color: #f8f9fa;
+    color: #333;
+    padding: 10px;
+    margin-top: 20px;
+    text-align: center;
+    font-weight: bold;
+    border-radius: 5px;
+}
+
+.form-section {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+
+.form-container {
+    width: 48%;
+    margin-bottom: 20px;
 }
 
 .alert {
-    border: 2px solid #FFD700; /* Borde amarillo para el contenedor de predicción */
+    border: 2px solid #FFD700;
     border-radius: 5px;
     font-size: 16px;
+    padding: 10px;
+    margin-top: 10px;
+    color: #333;
+    background-color: #f8f9fa;
+}
+
+@media (max-width: 768px) {
+    .form-container {
+        width: 100%;
+    }
 }

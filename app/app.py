@@ -80,7 +80,7 @@ def index():
 
             modelo = request.form['modelo']
 
-            #Creación del DataFrame
+            #Creacion del DataFrame
             input_data = pd.DataFrame([{
                 'hora': hora,
                 'temperatura': temperatura,
